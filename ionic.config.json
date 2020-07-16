@@ -1,0 +1,7 @@
+{
+  "name": "Friends CRM",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
