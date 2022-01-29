@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { ContactService } from '../contacts/contactService';
+import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+
 
 @Component({
   selector: 'app-tab2',
@@ -7,6 +11,16 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {}
+  public newName :string;
+  public newMail :string;
+
+
+  onAddContact(){
+          this.contactService.addContact(this.newName, this.newMail);
+          this.router.navigate(['tabs/contacts']);
+  };
+
+  constructor(private contactService:ContactService,
+    private router: Router) {}
 
 }

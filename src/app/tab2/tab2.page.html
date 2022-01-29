@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Add contact
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,5 +13,32 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <ion-card>
+    <ion-card-header>
+        <ion-card-title>
+            NEW CONTACT
+        </ion-card-title>
+    </ion-card-header>
+    
+      <ion-card-content>
+        <form (ngSubmit)="onAddContact()">
+          <ion-item>
+            <ion-label position="floating">Name</ion-label>
+            <ion-input type="text" name="InputName" [(ngModel)]="newName" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" name="inputEmai" [(ngModel)]="newMail" required></ion-input>
+          </ion-item>
+          <div class="ion-padding-horizontal ion-padding-top">
+            <ion-button type="submit" id="btn-confirm">
+              <ion-icon slot="start" name="person-add-outline"></ion-icon>
+              <ion-label slot="end">Add contact</ion-label>
+            </ion-button>
+          </div>
+          </form>
+        
+      </ion-card-content>
+    
+</ion-card>
 </ion-content>
