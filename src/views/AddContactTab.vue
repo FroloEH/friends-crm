@@ -60,8 +60,7 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { personAddOutline } from "ionicons/icons";
-import { useStore } from "vuex";
-import { key } from "../store/Store";
+import { contactService } from "../services/ContactService";
 
 export default defineComponent({
   components: {
@@ -87,21 +86,13 @@ export default defineComponent({
     };
   },
   setup() {
-    const contactStore = useStore(key); 
     return {
       personAddOutline,
-      contactStore
     };
   },
   methods: {
     submitForm() {
-      console.log("Name: " + this.newName);
-      console.log("Email: " + this.newMail);
-      
-      this.contactStore.state.contacts.push({
-        name: this.newName,
-        email: this.newMail,
-      });
+      contactService.addContact(this.newName, this.newMail);
       this.newName = "";
       this.newMail = "";
     },
