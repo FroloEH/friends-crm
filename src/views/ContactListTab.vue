@@ -1,19 +1,9 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title> Contacts </ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
+  <default-layout page-title="Contacts">
+    <template v-slot:content>
       <ion-grid>
         <ion-row>
           <ion-col size="8" offset="2">
-            <ion-header collapse="condense">
-              <ion-toolbar>
-                <ion-title size="large">Contacts</ion-title>
-              </ion-toolbar>
-            </ion-header>
             <ion-list>
               <ion-item v-for="contact in contacts" :key="contact.name">
                 <ion-icon :icon="personCircleOutline" />
@@ -27,17 +17,12 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-    </ion-content>
-  </ion-page>
+    </template>
+  </default-layout>
 </template>
 
 <script lang="ts">
 import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
   IonGrid,
   IonButton,
   IonLabel,
@@ -50,15 +35,11 @@ import {
 import { contactService } from '../services/ContactService';
 
 import { personCircleOutline, mailOutline } from "ionicons/icons";
+import DefaultLayout from '@/components/DefaultLayout.vue';
 
 
 export default {
   components: {
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonPage,
     IonGrid,
     IonButton,
     IonLabel,
@@ -67,6 +48,7 @@ export default {
     IonList,
     IonCol,
     IonRow,
+    DefaultLayout,
   },
   setup() {
     const contacts = contactService.getAllContacts();

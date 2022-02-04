@@ -1,18 +1,6 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title> Add contact </ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content>
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Add contact</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
+<default-layout page-title="Add contact">
+    <template v-slot:content>
       <ion-card>
         <ion-card-header>
           <ion-card-title> NEW CONTACT </ion-card-title>
@@ -37,17 +25,12 @@
           </form>
         </ion-card-content>
       </ion-card>
-    </ion-content>
-  </ion-page>
+    </template>
+  </default-layout>
 </template>
 
 <script lang="ts">
 import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -61,14 +44,10 @@ import {
 import { defineComponent } from "vue";
 import { personAddOutline } from "ionicons/icons";
 import { contactService } from "../services/ContactService";
+import DefaultLayout from "@/components/DefaultLayout.vue";
 
 export default defineComponent({
   components: {
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonPage,
     IonCard,
     IonCardContent,
     IonCardHeader,
@@ -77,6 +56,7 @@ export default defineComponent({
     IonInput,
     IonItem,
     IonIcon,
+    DefaultLayout,
     IonButton,
   },
   data() {
