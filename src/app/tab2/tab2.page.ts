@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+/* import { Component } from '@angular/core';
 import { ContactService } from '../contacts/contactService';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
@@ -24,3 +24,4 @@ export class Tab2Page {
     private router: Router) {}
 
 }
+ */

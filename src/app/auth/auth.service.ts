@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, LOCALE_ID } from "@angular/core";
+/* import { Injectable, OnDestroy, LOCALE_ID } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, from } from "rxjs";
 import { map, tap } from "rxjs/operators";
@@ -199,3 +199,4 @@ export class AuthService implements OnDestroy {
     Plugins.Storage.set({ key: "authData", value: data });
   }
 }
+ */
