@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/* import { Injectable } from '@angular/core';
 import { CanLoad, Route, UrlSegment, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { take, tap, switchMap } from 'rxjs/operators';
@@ -32,3 +32,4 @@ export class AuthGuard implements CanLoad {
     );
   }
 }
+ */

@@ -1,7 +1,7 @@
 {
-  "name": "Friends CRM",
+  "name": "friends-crm",
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular"
+  "type": "vue"
 }

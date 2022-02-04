@@ -1,14 +1,15 @@
-import { Injectable, OnDestroy, LOCALE_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, from } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { Plugins } from '@capacitor/core';
-import { auth } from 'firebase/app';
-import { AngularFireAuth } from '@angular/fire/auth';
+/* import { Injectable, OnDestroy, LOCALE_ID } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, from } from "rxjs";
+import { map, tap } from "rxjs/operators";
+import { Plugins } from "@capacitor/core";
+import { auth } from "firebase/app";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { Router } from "@angular/router";
 
-import { environment } from '../../environments/environment';
-import { User } from './user.model';
-import { AngularFireModule } from '@angular/fire';
+import { environment } from "../../environments/environment";
+import { User } from "./user.model";
+import { AngularFireModule } from "@angular/fire";
 
 export interface AuthResponseData {
   kind: string;
@@ -21,7 +22,7 @@ export interface AuthResponseData {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService implements OnDestroy {
   private _user = new BehaviorSubject<User>(null);
@@ -29,7 +30,7 @@ export class AuthService implements OnDestroy {
 
   get userIsAuthenticated() {
     return this._user.asObservable().pipe(
-      map(user => {
+      map((user) => {
         if (user) {
           return !!user.token;
         } else {
@@ -41,7 +42,7 @@ export class AuthService implements OnDestroy {
 
   get userId() {
     return this._user.asObservable().pipe(
-      map(user => {
+      map((user) => {
         if (user) {
           return user.id;
         } else {
@@ -53,7 +54,7 @@ export class AuthService implements OnDestroy {
 
   get token() {
     return this._user.asObservable().pipe(
-      map(user => {
+      map((user) => {
         if (user) {
           return user.token;
         } else {
@@ -65,11 +66,13 @@ export class AuthService implements OnDestroy {
 
   constructor(
     private http: HttpClient,
-    private afAuth: AngularFireAuth) {}
+    private afAuth: AngularFireAuth,
+    private router: Router
+  ) {}
 
   autoLogin() {
-    return from(Plugins.Storage.get({ key: 'authData' })).pipe(
-      map(storedData => {
+    return from(Plugins.Storage.get({ key: "authData" })).pipe(
+      map((storedData) => {
         if (!storedData || !storedData.value) {
           return null;
         }
@@ -91,13 +94,13 @@ export class AuthService implements OnDestroy {
         );
         return user;
       }),
-      tap(user => {
+      tap((user) => {
         if (user) {
           this._user.next(user);
           this.autoLogout(user.tokenDuration);
         }
       }),
-      map(user => {
+      map((user) => {
         return !!user;
       })
     );
@@ -106,9 +109,7 @@ export class AuthService implements OnDestroy {
   signup(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
-        `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
-          environment.firebase.apiKey
-        }`,
+        `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${environment.firebase.apiKey}`,
         { email: email, password: password, returnSecureToken: true }
       )
       .pipe(tap(this.setUserDatafromResponseData.bind(this)));
@@ -117,29 +118,25 @@ export class AuthService implements OnDestroy {
   login(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
-        `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
-          environment.firebase.apiKey
-        }`,
+        `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${environment.firebase.apiKey}`,
         { email: email, password: password, returnSecureToken: true }
       )
       .pipe(tap(this.setUserDatafromResponseData.bind(this)));
-      console.log(this);
   }
 
   googleSignin() {
     const provider = new auth.GoogleAuthProvider();
     const credential = this.afAuth.signInWithPopup(provider);
-    console.log(credential);
     credential
-    .then(
-      cred => this.setUserData(
-        cred.user.uid,
-        cred.user.email,
-        cred.user.refreshToken,
-        "1000"
-      )
-    );
-    console.log(credential);
+      .then((cred) => {
+        this.setUserData(
+          cred.user.uid,
+          cred.user.email,
+          cred.user.refreshToken,
+          "1000"
+        );
+      })
+      .finally(() => this.router.navigateByUrl("/"));
   }
 
   logout() {
@@ -147,7 +144,7 @@ export class AuthService implements OnDestroy {
       clearTimeout(this.activeLogoutTimer);
     }
     this._user.next(null);
-    Plugins.Storage.remove({ key: 'authData' });
+    Plugins.Storage.remove({ key: "authData" });
   }
 
   ngOnDestroy() {
@@ -171,29 +168,21 @@ export class AuthService implements OnDestroy {
       userData.email,
       userData.idToken,
       userData.expiresIn
-    )
+    );
   }
 
-  private setUserData(localId : string, email : string, idToken : string, expiresIn : string) {
-    const expirationTime = new Date(
-      new Date().getTime() + +expiresIn * 1000
-    );
-    const user = new User(
-      localId,
-      email,
-      idToken,
-      expirationTime
-    );
+  private setUserData(
+    localId: string,
+    email: string,
+    idToken: string,
+    expiresIn: string
+  ) {
+    const expirationTime = new Date(new Date().getTime() + +expiresIn * 1000);
+    const user = new User(localId, email, idToken, expirationTime);
     this._user.next(user);
     this.autoLogout(user.tokenDuration);
-    this.storeAuthData(
-      localId,
-      idToken,
-      expirationTime.toISOString(),
-      email
-    );
+    this.storeAuthData(localId, idToken, expirationTime.toISOString(), email);
   }
-
 
   private storeAuthData(
     userId: string,
@@ -205,8 +194,9 @@ export class AuthService implements OnDestroy {
       userId: userId,
       token: token,
       tokenExpirationDate: tokenExpirationDate,
-      email: email
+      email: email,
     });
-    Plugins.Storage.set({ key: 'authData', value: data });
+    Plugins.Storage.set({ key: "authData", value: data });
   }
 }
+ */
