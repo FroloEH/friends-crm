@@ -47,21 +47,13 @@ import {
   IonCol,
   IonRow,
 } from "@ionic/vue";
+import {useStore} from 'vuex';
+import {key} from '../store/Store';
 
 import { personCircleOutline, mailOutline } from "ionicons/icons";
 
 
 export default {
-  computed: {
-    contacts() {
-      return [
-        {
-          name: "Ferdo Bobula",
-          email: "richard.frolkovic@event.horizon.sk",
-        },
-      ];
-    },
-  },
   components: {
     IonHeader,
     IonToolbar,
@@ -78,9 +70,12 @@ export default {
     IonRow,
   },
   setup() {
+    const contactStore = useStore(key);
+    const contacts = contactStore.state.contacts;
     return {
       mailOutline,
-      personCircleOutline
+      personCircleOutline,
+      contacts,
     };
   },
 };

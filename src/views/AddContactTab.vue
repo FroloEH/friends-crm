@@ -22,15 +22,15 @@
           <form @submit.prevent="submitForm">
             <ion-item>
               <ion-label position="floating">Name</ion-label>
-              <ion-input type="text" v-model="newName" required></ion-input>
+              <ion-input type="text" v-model="newName" required />
             </ion-item>
             <ion-item>
               <ion-label position="floating">Email</ion-label>
-              <ion-input type="email" v-model="newMail" required></ion-input>
+              <ion-input type="email" v-model="newMail" required />
             </ion-item>
             <div class="ion-padding-horizontal ion-padding-top">
               <ion-button type="submit" id="btn-confirm">
-                <ion-icon slot="start" :icon="personAddOutline"></ion-icon>
+                <ion-icon slot="start" :icon="personAddOutline" />
                 <ion-label slot="end">Add contact</ion-label>
               </ion-button>
             </div>
@@ -58,9 +58,12 @@ import {
   IonIcon,
   IonButton,
 } from "@ionic/vue";
+import { defineComponent } from "vue";
 import { personAddOutline } from "ionicons/icons";
+import { useStore } from "vuex";
+import { key } from "../store/Store";
 
-export default {
+export default defineComponent({
   components: {
     IonHeader,
     IonToolbar,
@@ -79,14 +82,29 @@ export default {
   },
   data() {
     return {
-      newName : "",
-      newMail : "",
+      newName: "",
+      newMail: "",
     };
   },
   setup() {
+    const contactStore = useStore(key); 
     return {
       personAddOutline,
+      contactStore
     };
   },
-};
+  methods: {
+    submitForm() {
+      console.log("Name: " + this.newName);
+      console.log("Email: " + this.newMail);
+      
+      this.contactStore.state.contacts.push({
+        name: this.newName,
+        email: this.newMail,
+      });
+      this.newName = "";
+      this.newMail = "";
+    },
+  },
+});
 </script>
