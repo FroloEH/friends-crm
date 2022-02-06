@@ -1,21 +1,23 @@
 import router from "../router";
 import firebase from "firebase/app";
-import 'firebase/auth';
+import "firebase/auth";
 
 class AuthenticationService {
   private firebaseApp: firebase.app.App;
 
   constructor() {
     const firebaseConfig = {
-      apiKey: "AIzaSyBqpeozK_iaPBBdlssKYUhcLdhdPYtmtpg",
-      authDomain: "friends-crm.firebaseapp.com",
-      databaseURL: "https://friends-crm.firebaseio.com",
-      projectId: "friends-crm",
-      storageBucket: "friends-crm.appspot.com",
-      messagingSenderId: "909239775339",
-      appId: "1:909239775339:web:0850a062c7b1e56a19812e",
-      measurementId: "G-5JR8SQRF35",
+      apiKey: process.env.VUE_APP_API_KEY,
+      authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+      databaseURL: process.env.VUE_APP_DATABASE_URL,
+      projectId: process.env.VUE_APP_PROJECT_ID,
+      storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+      messagingSenderId: process.env.VUE_APP_MESSAGIN_SENDER_ID,
+      appId: process.env.VUE_APP_APP_ID,
+      measurementId: process.env.VUE_APP_MEASURMENT_ID,
     };
+
+    console.log(firebaseConfig);
 
     this.firebaseApp = firebase.initializeApp(firebaseConfig);
   }
@@ -25,7 +27,7 @@ class AuthenticationService {
     this.firebaseApp
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .finally(() => router.push("/"))
+      .then((data) => this.afterLogin(data))
       .catch((err) => (errorMessage = err.message));
 
     return errorMessage;
@@ -36,7 +38,7 @@ class AuthenticationService {
     this.firebaseApp
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .finally(() => router.push("/"))
+      .then((data) => this.afterLogin(data))
       .catch((err) => (errorMessage = err.message));
 
     return errorMessage;
@@ -47,7 +49,22 @@ class AuthenticationService {
     this.firebaseApp
       .auth()
       .signInWithPopup(provider)
-      .finally(() => router.push("/"));
+      .then((data) => this.afterLogin(data));
+  }
+
+  hasValidIdToken() {
+    //TO-DO: Validation and logout after token has expired
+    const idToken = localStorage.getItem("token");
+    return idToken ? true : false;
+  }
+
+  private afterLogin(responseData: firebase.auth.UserCredential) {
+    const credentials =
+      responseData.credential as firebase.auth.OAuthCredential;
+    if (credentials.idToken) {
+      localStorage.setItem("token", credentials.idToken);
+      router.replace("/");
+    }
   }
 }
 
