@@ -2,6 +2,7 @@ import router from "../router";
 import firebase from "firebase/app";
 import "firebase/auth";
 
+
 class AuthenticationService {
   private firebaseApp: firebase.app.App;
 
@@ -16,8 +17,6 @@ class AuthenticationService {
       appId: process.env.VUE_APP_APP_ID,
       measurementId: process.env.VUE_APP_MEASURMENT_ID,
     };
-
-    console.log(firebaseConfig);
 
     this.firebaseApp = firebase.initializeApp(firebaseConfig);
   }

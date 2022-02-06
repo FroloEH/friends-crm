@@ -31,6 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/auth",
     component: AuthenticationPage,
   },
+
 ];
 
 const router = createRouter({
@@ -47,5 +48,6 @@ router.beforeEach(function (to, _from, next) {
   }
 
 });
+
 
 export default router;

@@ -73,6 +73,8 @@ import {
 export default defineComponent({
   components: {
     IonPage,
+    IonCard,
+    IonCardContent,
     IonLabel,
     IonInput,
     IonItem,
